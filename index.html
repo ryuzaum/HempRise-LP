@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HempRise Project - 日本の麻文化を、未来へ繋ぐ</title>
+    
+    <!-- Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS Variables (Design System) --- */
+        :root {
+            --main-green: #2c5e3f;
+            --dark-green: #1e422b;
+            --accent-gold: #d4af37;
+            --bg-light: #fdfdfa;
+            --text-dark: #222222;
+            --text-light: #555;
+            --border-color: #e0e0e0;
+            --font-serif: 'Noto Serif JP', serif;
+            --font-sans: 'Zen Kaku Gothic New', sans-serif;
+        }
+
+        /* --- Base Styles --- */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.9;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        h1, h2, h3, h4 {
+            font-family: var(--font-serif);
+            font-weight: 700;
+            color: var(--main-green);
+            line-height: 1.4;
+        }
+        section {
+            padding: 100px 0;
+            border-bottom: 1px solid var(--border-color);
+            overflow: hidden; /* For animation */
+        }
+        section:last-of-type {
+            border-bottom: none;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Header --- */
+        header {
+            background-color: rgba(253, 253, 250, 0.85);
+            padding: 16px 0;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: box-shadow 0.3s;
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-title {
+            font-size: 1.9em;
+            font-family: var(--font-serif);
+            color: var(--main-green);
+            margin: 0;
+            text-decoration: none;
+        }
+        header nav ul {
+            list-style: none; margin: 0; padding: 0; display: flex; gap: 35px;
+        }
+        header nav a {
+            text-decoration: none; color: var(--text-dark); font-weight: 700; font-size: 1em; padding: 5px 0; position: relative;
+        }
+        header nav a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 0%; height: 2px; background-color: var(--accent-gold); transition: width 0.3s ease;
+        }
+        header nav a:hover::after {
+            width: 100%;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://example.com/hero-banner.jpg') no-repeat center center;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding: 140px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero h1 {
+            font-size: 4.5em;
+            color: white;
+            text-shadow: 2px 2px 15px rgba(0,0,0,0.5);
+            margin: 0 0 20px;
+        }
+        .hero p {
+            font-size: 1.5em;
+            max-width: 750px;
+            margin: 0 auto 40px;
+            font-family: var(--font-serif);
+        }
+
+        /* --- General Components --- */
+        .section-title {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2em;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto 80px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: var(--main-green);
+            color: white;
+            padding: 16px 36px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .cta-button:hover {
+            background-color: var(--dark-green);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .cta-button.accent {
+            background-color: var(--accent-gold);
+            color: var(--text-dark);
+        }
+        .cta-button.accent:hover {
+            background-color: #c09d2e;
+        }
+
+        /* --- Specific Sections --- */
+        #culture .culture-points {
+            list-style: none; padding: 0;
+        }
+        #culture .culture-points li {
+            font-size: 1.1em; margin-bottom: 20px; padding-left: 30px; position: relative;
+        }
+        #culture .culture-points li::before {
+            content: '❖'; color: var(--accent-gold); position: absolute; left: 0; font-size: 1.2em;
+        }
+        #model .model-cards {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;
+        }
+        .card {
+            background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.07); transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+        .card h3 {
+            margin-top: 0; font-size: 1.8em;
+        }
+        .card img {
+            box-shadow: none;
+        }
+        #support .support-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center;
+        }
+        #support .use-of-funds ul {
+            list-style: none; padding: 0;
+        }
+        #support .use-of-funds li {
+            background: #f4f8f5; padding: 12px 20px; border-radius: 8px; margin-bottom: 12px; font-weight: 700; border-left: 4px solid var(--main-green);
+        }
+        
+        /* --- Contact Form --- */
+        #contact { background-color: #f4f8f5; }
+        .contact-form { max-width: 700px; margin: 0 auto; }
+        .form-group { margin-bottom: 25px; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 18px; border: 1px solid #ddd; border-radius: 8px; font-size: 1em; font-family: inherit; box-sizing: border-box; transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--main-green); box-shadow: 0 0 10px rgba(44, 94, 63, 0.2);
+        }
+        
+        /* --- Footer --- */
+        footer {
+            background: #222; color: #ccc; text-align: center; padding: 50px 0;
+        }
+        footer p { margin: 0; }
+
+        /* --- Responsive --- */
+        @media (max-width: 992px) {
+            .grid-2 { gap: 40px; }
+        }
+        @media (max-width: 768px) {
+            .grid-2, #support .support-grid { grid-template-columns: 1fr; }
+            .grid-2 .text-content { order: 2; }
+            .grid-2 .image-content { order: 1; margin-bottom: 40px; }
+            .hero h1 { font-size: 3em; }
+            .hero p { font-size: 1.2em; }
+            .section-title { font-size: 2.4em; }
+            header nav { display: none; } /* Simple responsive for now */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo-title">HempRise</a>
+            <nav>
+                <ul>
+                    <li><a href="#about">プロジェクト</a></li>
+                    <li><a href="#culture">麻の魅力</a></li>
+                    <li><a href="#model">社会モデル</a></li>
+                    <li><a href="#future">未来の構想</a></li>
+                    <li><a href="#contact">参加する</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1 class="fade-in">未来を拓く、日本の麻ルネサンス</h1>
+            <p class="fade-in" style="transition-delay: 0.2s;">忘れられた日本の宝「麻」。その無限の可能性を解放し、持続可能な社会を創造する。</p>
+            <a href="#about" class="cta-button accent fade-in" style="transition-delay: 0.4s;">プロジェクトを知る</a>
+        </section>
+
+        <section id="about">
+            <div class="container">
+                <div class="grid-2">
+                    <div class="text-content fade-in">
+                        <h2 class="section-title" style="text-align: left; margin-bottom: 30px;">麻と日本人の、<br>失われた絆を取り戻す。</h2>
+                        <p>かつて麻は、神事や衣食住、医療に至るまで、日本人の生活と文化の中心にありました。しかし、歴史の流れの中で大きな誤解を受け、その価値は社会から忘れ去られようとしています。</p>
+                        <p>HempRise Projectは、麻が持つ本来の価値を科学的根拠に基づき正しく伝え、現代社会が直面する課題（環境問題、健康、地方創生）への解決策として再提案する、文化復興・社会変革プロジェクトです。</p>
+                    </div>
+                    <div class="image-content fade-in" style="transition-delay: 0.2s;">
+                        <img src="https://example.com/hemp-field.jpg" alt="朝日を浴びる広大なヘンプ畑">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="culture" style="background-color: #fff;">
+            <div class="container">
+                <h2 class="section-title">伝統と革新の融合</h2>
+                <p class="section-subtitle">日本の麻文化は、自然との共生そのものです。私たちは、この伝統的な価値観をサステナブルな未来の資源として、現代に蘇らせます。</p>
+                <div class="grid-2">
+                    <div class="image-content fade-in">
+                        <img src="https://example.com/hemp-fabric.jpg" alt="美しい光沢を持つ麻織物">
+                    </div>
+                    <div class="text-content fade-in" style="transition-delay: 0.2s;">
+                        <h3>サステナビリティの原点</h3>
+                        <ul class="culture-points">
+                            <li><strong>環境への貢献：</strong>成長が早く、農薬をほとんど必要としない麻は、土壌を改良し、CO2を大量に吸収するカーボンネガティブな植物です。</li>
+                            <li><strong>多様な用途：</strong>衣類、建材、食品、化粧品、医療品、バイオプラスチックまで。麻はあらゆる産業に変革をもたらす可能性を秘めています。</li>
+                            <li><strong>文化の継承：</strong>神社のしめ縄に代表される神聖な存在としての麻文化を守り、その精神性を次世代へと継承します。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="model">
+            <div class="container">
+                <h2 class="section-title">地域から始まる、新しい社会モデル</h2>
+                <p class="section-subtitle">私たちは、単なる啓蒙活動に留まりません。地域社会と連携し、教育と産業を組み合わせた具体的なモデルを構築することで、持続可能な社会変革を目指します。</p>
+                <div class="model-cards">
+                    <div class="card fade-in">
+                        <h3>地域との連携</h3>
+                        <p>耕作放棄地などを活用し、地方自治体や農家と連携した特区モデルを設立。栽培から加工までを一貫して行い、新たな雇用と地域ブランドを創出します。</p>
+                    </div>
+                    <div class="card fade-in" style="transition-delay: 0.2s;">
+                        <h3>教育プログラム</h3>
+                        <p>麻に関する正しい知識を広めるため、教育機関と連携したワークショップやセミナーを開催。専門家や技術者の育成にも力を入れます。</p>
+                    </div>
+                    <div class="card fade-in" style="transition-delay: 0.4s;">
+                        <h3>新産業の創出</h3>
+                        <p>医療用CBDの研究開発、ヘンプクリートなどの環境配慮型建材、次世代エネルギー源としての活用など、先進的なR&Dを推進し、新産業を創出します。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="future" style="background-color: #fff;">
+            <div class="container">
+                <h2 class="section-title">未来を共創する、新しいコミュニティ</h2>
+                <p class="section-subtitle">HempRiseは、中央集権的な組織ではなく、透明性と公平性の高いDAO（自律分散型組織）による運営を目指します。プロジェクトの意思決定に誰もが参加できる、新しい形のコミュニティです。</p>
+                <div class="grid-2">
+                    <div class="text-content fade-in">
+                        <h3>DAOとクラウドファンディング</h3>
+                        <p>その第一歩として、クラウドファンディングを通じて、私たちのビジョンに共感してくださる初期サポーターを募集します。あなたの一歩が、日本の未来を変える力になります。</p>
+                        <a href="#support" class="cta-button" style="margin-top: 20px;">支援方法を見る</a>
+                    </div>
+                    <div class="image-content fade-in" style="transition-delay: 0.2s;">
+                        <img src="https://example.com/community-dao.jpg" alt="人々がネットワークで繋がる未来的なイメージ">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="support">
+            <div class="container">
+                <h2 class="section-title">あなたの支援が、未来への種となる</h2>
+                <div class="support-grid">
+                    <div class="use-of-funds fade-in">
+                        <h3>資金の使い道</h3>
+                        <p>皆様からのご支援は、日本の麻文化復興のために、以下の目的で大切に活用させていただきます。</p>
+                        <ul>
+                            <li>🌱 研究開発（医療・建材・エネルギー分野）</li>
+                            <li>📚 教育・啓蒙活動（セミナー、資料作成）</li>
+                            <li>🤝 地域連携モデルの立ち上げ費用</li>
+                            <li>📜 法整備に向けたロビー活動</li>
+                            <li>🔗 DAOプラットフォームの構築</li>
+                        </ul>
+                    </div>
+                    <div class="how-to-support fade-in" style="transition-delay: 0.2s; text-align: center;">
+                        <h3>未来への投資</h3>
+                        <p>クラウドファンディングの準備が整い次第、ご登録いただいたメールアドレスへ優先的にお知らせします。ぜひ下記フォームよりご登録ください。</p>
+                        <a href="#contact" class="cta-button accent">先行情報を受け取る</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <h2 class="section-title">お問い合わせ・先行情報登録</h2>
+                <p class="section-subtitle">プロジェクトへのご質問、メディア取材、協業のご提案、そしてクラウドファンディングの先行情報をご希望の方は、こちらからご連絡ください。</p>
+                <form action="#" method="post" class="contact-form fade-in">
+                    <div class="form-group">
+                        <input type="text" name="name" placeholder="お名前" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" placeholder="メールアドレス" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea name="message" rows="6" placeholder="メッセージをご記入ください (任意)"></textarea>
+                    </div>
+                    <button type="submit" class="cta-button" style="width: 100%;">登録する</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 HempRise Project. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple fade-in animation on scroll
+        const faders = document.querySelectorAll('.fade-in');
+        const appearOptions = {
+            threshold: 0.2,
+            rootMargin: "0px 0px -50px 0px"
+        };
+        const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add('visible');
+                    appearOnScroll.unobserve(entry.target);
+                }
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => {
+            appearOnScroll.observe(fader);
+        });
+    </script>
+
+</body>
+</html>
